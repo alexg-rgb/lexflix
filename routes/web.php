@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,13 +12,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    return view('components.main');
-//});
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', 'App\Http\Controllers\MoviesController@index')->name('movies.index');
+Route::get('/movies/{movie}', 'App\Http\Controllers\MoviesController@show')->name('movies.show');
 
-Route::get('/movie', function () {
-    return view('show');
-});
