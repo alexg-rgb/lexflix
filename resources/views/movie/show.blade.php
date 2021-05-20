@@ -6,7 +6,7 @@
                 <div class="ml-24">
                     <h2 class="text-4xl font-semibold">{{ $movie['title'] }}</h2>
                     <div class="flex items-center text-gray-400 text-xs">
-                        <span>star</span>
+                        <span><i class="fas fa-star fill-current text-yellow-300"></i></span>
                         <span class="ml-1">{{ $movie['vote_average'] *10 . '%' }}</span>
                         <span class="mx-2">|</span>
                         <span>{{ \Carbon\Carbon::parse($movie['release_date'])->format('M d, Y') }}</span>
