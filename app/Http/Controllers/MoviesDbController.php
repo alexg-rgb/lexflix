@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MoviesDb;
+use App\Models\Movies;
 use http\Exception\BadConversionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class MoviesDbController extends Controller
     public function index()
     {
         $popularMovies = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/movie/top_rated')
+            ->get('https://api.themoviedb.org/3/movie/popular')
             ->json('results');
 
         $genresArray = Http::withToken(config('services.tmdb.token'))
@@ -42,6 +42,7 @@ class MoviesDbController extends Controller
         ]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -59,27 +60,21 @@ class MoviesDbController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title'=>'required',
-            'vote_average'=>'required',
-            'release_date'=>'required',
-            'genres'=>'required',
-            'poster_path'=>'required'
+        $this->validate(request(),[
+            //put fields to be validated here
         ]);
 
-        $query = DB::table('movies')->insert([
-           'title'=>$request->input('title'),
-           'vote_average'=>$request->input('vote_average'),
-            'release_date'=>$request->input('release_date'),
-            'genres'=>$request->input('genres'),
-            'poster_path'=>$request->input('poster_path')
-        ]);
+        $movie= new Movies();
+        $movie->title= $request['title'];
+        $movie->vote_average= $request['vote_average'];
+        $movie->release_date= $request['release_date'];
+        $movie->genres= $request['genres'];
+        $movie->poster_path= $request['poster_path'];
 
-        if($query){
-            return back()->with('success', 'Data have been successfuly inserted');
-        }else{
-            return back()->with('fail', 'Something went wrong');
-        }
+        // add other fields
+        $movie->save();
+
+        return redirect('/boMovies');
     }
 
     /**
@@ -90,7 +85,14 @@ class MoviesDbController extends Controller
      */
     public function show($id)
     {
-        //
+        $movie = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/movie/'.$id.'?append_to_response=credits,videos,images')
+            ->json();
+
+//        dump($movie);
+        return view('backoffice.showBack', [
+            'movie'=>$movie,
+        ]);
     }
 
     /**

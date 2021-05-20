@@ -26,16 +26,22 @@ require __DIR__.'/auth.php';
 
 Route::get('/', [MoviesController::class, 'index'])
     ->middleware('auth')
-    ->name('index');
+    ->name('movies');
+
+
 Route::get('/movies/{movie}', 'App\Http\Controllers\MoviesController@show')
     ->middleware('auth')
-    ->name('show');
+    ->name('movies.show');
 
 
 
 Route::get('/boMovies', [MoviesDbController::class, 'index'])
     ->middleware('auth')
     ->name('back.index');
+
+Route::get('/boMovies/{movie}', 'App\Http\Controllers\MoviesDbController@show')
+    ->middleware('auth')
+    ->name('movies.showBack');
 
 Route::post('create', [MoviesDbController::class, 'store'])
     ->middleware('auth')

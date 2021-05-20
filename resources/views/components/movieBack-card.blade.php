@@ -1,35 +1,19 @@
-<tr class="text-black">
-    <form action="create" method="post" enctype="multipart/form-data">
-        @csrf
-        <td>
-            <input name="title" type="text" value="{{ $movie['title'] }}">
-            <span style="color:red">@error('name'){{ $message }} @enderror</span>
-        </td>
-        <td>
-            <input name="vote_average" type="text" value="{{ $movie['vote_average'] * 10 . '%' }}">
-            <span style="color:red">@error('vote_average'){{ $message }} @enderror</span>
-
-        </td>
-        <td>
-            <input name="release_date" type="text" value="{{ \Carbon\Carbon::parse($movie['release_date'])->format('M d, Y') }}">
-            <span style="color:red">@error('release_date'){{ $message }} @enderror</span>
-
-        </td>
-        <td>
-            <input name="genres" type="text" value="
-                @foreach($movie['genre_ids'] as $genre)
+<div class="mt-8">
+    <a href="{{ route('movies.showBack', $movie['id']) }}">
+        <img src="{{ 'https://image.tmdb.org/t/p/w500/'.$movie['poster_path']}}" alt="{{ $movie['title'] }}" class="hover:opacity-75 transition ease-in-out duration-150 w-52 sm:w-64 md:w-52 lg:w-64">
+    </a>
+    <div class="mt-2">
+        <a href="{{ route('movies.show', $movie['id']) }}" class="text-lg mt-2 hover:text-gray-300">{{ $movie['title'] }}</a>
+        <div class="flex items-center text-gray-400 text-xs">
+            <span><i class="fas fa-star fill-current text-yellow-300"></i></span>
+            <span class="ml-1">{{ $movie['vote_average'] * 10 . '%' }}</span>
+            <span class="mx-2">|</span>
+            <span>{{ \Carbon\Carbon::parse($movie['release_date'])->format('M d, Y') }}</span>
+        </div>
+        <div class="text-gray-400 text-xs">
+            @foreach($movie['genre_ids'] as $genre)
                 {{ $genres->get($genre) }} @if(!$loop->last), @endif
-                @endforeach
-                ">
-            <span style="color:red">@error('genres'){{ $message }} @enderror</span>
-
-        </td>
-        <td>
-            <input name="poster_path" type="text" value="{{ 'https://image.tmdb.org/t/p/w500/'.$movie['poster_path']}}">
-            <span style="color:red">@error('poster_path'){{ $message }} @enderror</span>
-            <img src="{{ 'https://image.tmdb.org/t/p/w500/'.$movie['poster_path']}}" alt="">
-        </td>
-        <td>
-        <td><button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button></td>
-    </form>
-</tr>
+            @endforeach
+        </div>
+    </div>
+</div>
